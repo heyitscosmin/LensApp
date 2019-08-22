@@ -19,18 +19,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity<LoginActivity> extends AppCompatActivity {
 
     static final int GOOGLE_SIGN_IN = 123;
     FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     Button btn_login, btn_logout;
     TextView text, account_name;
     ImageView image;
@@ -50,6 +54,10 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_circular);
 
         mAuth = FirebaseAuth.getInstance();
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -78,6 +86,7 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
         }
     }
 
+
     public void SignInGoogle() {
         progressBar.setVisibility(View.VISIBLE);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -98,6 +107,7 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
                             Log.d("TAG", "signInWithCredential:success");
 
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             MainActivity.this.updateUI(user);
                         } else {
                             progressBar.setVisibility(View.INVISIBLE);
@@ -126,13 +136,22 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
             }
         }
     }
+    private void writeNewUser(String userId, String name, String email) {
+        User user = new User(name, email);
 
+        mDatabase.child("Users").child(userId).setValue(user);
+    }
     private void updateUI(FirebaseUser user) {
+
         if (user != null) {
             String name = user.getDisplayName();
             String email = user.getEmail();
+            String userID =  user.getUid();
 
-            account_name.append("Welcome " + name + " (" + email + ") ");
+
+           // account_name.append("Welcome " + name + " (" + email + ") " + userID);
+
+            writeNewUser(userID, name, email);
 
 
             text.setVisibility(View.INVISIBLE);
