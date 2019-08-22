@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "416921477526",
+    "firebase_url": "https://lens-project-df5ee.firebaseio.com",
+    "project_id": "lens-project-df5ee",
+    "storage_bucket": "lens-project-df5ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416921477526:android:09ab90ac31a9f17b",
+        "android_client_info": {
+          "package_name": "com.example.lens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416921477526-ehbrb4788tlqd8925c3jrkjmhirh7jla.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lens",
+            "certificate_hash": "c958bbfe3a04a4f431d92f381e23ff4bb6792ef2"
+          }
+        },
+        {
+          "client_id": "416921477526-b3maf6uuk76jup4o902u2ha78h70aqcd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcrc7z6-yL6xYRrrYAaV65JawGsgQudxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416921477526-b3maf6uuk76jup4o902u2ha78h70aqcd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
