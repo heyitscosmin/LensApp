@@ -26,15 +26,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity<LoginActivity> extends AppCompatActivity {
 
     static final int GOOGLE_SIGN_IN = 123;
     FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    DatabaseReference mDatabase;
     Button btn_login, btn_logout;
     TextView text, account_name;
     ImageView image;
@@ -55,8 +58,13 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+
+
+
+
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -83,6 +91,7 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             FirebaseUser user = mAuth.getCurrentUser();
             updateUI(user);
+
         }
     }
 
@@ -136,6 +145,27 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
             }
         }
     }
+
+    public void getData(){
+        final FirebaseUser user = mAuth.getCurrentUser();
+
+        final String uid = user.getUid();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //String user_name = dataSnapshot.child(uid).child("username").getValue().toString();
+                String user_name = dataSnapshot.child("Users").child(uid).child("username").getValue().toString();
+                account_name.setText(user_name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
 
@@ -149,9 +179,12 @@ public class MainActivity<LoginActivity> extends AppCompatActivity {
             String userID =  user.getUid();
 
 
-           // account_name.append("Welcome " + name + " (" + email + ") " + userID);
-
             writeNewUser(userID, name, email);
+
+            getData();
+
+
+
 
 
             text.setVisibility(View.INVISIBLE);
